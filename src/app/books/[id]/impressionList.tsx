@@ -41,7 +41,18 @@ const ImpressionList = async ({ bookId, userId }: Props) => {
               <td className="whitespace-pre-wrap" data-testid={`impression-${index}`}>
                 {impression.impression}
               </td>
-              <td>{impression.user.id === userId && <button type="button">感想を編集</button>}</td>
+              <td>
+                {impression.user.id === userId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      console.log('clicked!')
+                    }}
+                  >
+                    感想を編集
+                  </button>
+                )}
+              </td>
             </tr>
           )
         })}
