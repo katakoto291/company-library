@@ -4,9 +4,10 @@ import prisma from '@/libs/prisma/client'
 
 type Props = {
   bookId: number
+  userId: number
 }
 
-const ImpressionList = async ({ bookId }: Props) => {
+const ImpressionList = async ({ bookId, userId }: Props) => {
   const recentImpressions = await prisma.impression
     .findMany({
       where: { bookId: bookId },
@@ -39,6 +40,18 @@ const ImpressionList = async ({ bookId }: Props) => {
               </td>
               <td className="whitespace-pre-wrap" data-testid={`impression-${index}`}>
                 {impression.impression}
+              </td>
+              <td>
+                {impression.user.id === userId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      console.log('clicked!')
+                    }}
+                  >
+                    感想を編集
+                  </button>
+                )}
               </td>
             </tr>
           )
