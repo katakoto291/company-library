@@ -24,7 +24,9 @@ describe('navigationBar component', async () => {
   }))
 
   const { UserAvatarMock } = vi.hoisted(() => {
-    return { UserAvatarMock: vi.fn().mockImplementation(() => <div>userAvatar</div>) }
+    return {
+      UserAvatarMock: vi.fn().mockImplementation(() => <div>userAvatar</div>),
+    }
   })
   vi.mock('@/components/userAvatar', () => ({
     default: (...args: unknown[]) => UserAvatarMock(...args),
@@ -33,7 +35,11 @@ describe('navigationBar component', async () => {
   beforeEach(() => {
     pathnameMock.mockReturnValue({ push: vi.fn() })
     getServerSessionMock.mockReturnValue({
-      customUser: { id: loggedInUser.id, name: loggedInUser.name, email: loggedInUser.email },
+      customUser: {
+        id: loggedInUser.id,
+        name: loggedInUser.name,
+        email: loggedInUser.email,
+      },
     })
   })
 
@@ -44,7 +50,7 @@ describe('navigationBar component', async () => {
       </Suspense>,
     )
 
-    expect(await screen.findByText('company-library')).toBeInTheDocument()
+    expect(await screen.findByText('company-library-beta')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '書籍一覧' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '書籍一覧' })).not.toHaveClass('bg-gray-600')
     expect(screen.getByRole('link', { name: '登録' })).toBeInTheDocument()
@@ -64,7 +70,7 @@ describe('navigationBar component', async () => {
     )
 
     // Suspenseの解決を待つために、最初のテスト項目のみawaitを使う
-    expect(await screen.findByText('company-library')).toHaveAttribute('href', '/')
+    expect(await screen.findByText('company-library-beta')).toHaveAttribute('href', '/')
   })
 
   it('pathが/の場合、書籍一覧ボタンのデザインが強調される', async () => {
@@ -144,7 +150,11 @@ describe('navigationBar component', async () => {
     expect(await screen.findByText('userAvatar')).toBeInTheDocument()
     expect(UserAvatarMock).toHaveBeenLastCalledWith(
       {
-        user: { id: loggedInUser.id, name: loggedInUser.name, email: loggedInUser.email },
+        user: {
+          id: loggedInUser.id,
+          name: loggedInUser.name,
+          email: loggedInUser.email,
+        },
         size: 'sm',
       },
       undefined,
