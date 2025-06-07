@@ -1,26 +1,20 @@
 import { withAuth } from 'next-auth/middleware'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
-const PUBLIC_PATHS = ['/api/cron']
-
-export default withAuth(
-  function middleware(req: NextRequest) {
-    const { pathname } = req.nextUrl
-
-    if (PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
-      return NextResponse.next()
-    }
-
-    return NextResponse.next()
+export default withAuth({
+  pages: {
+    signIn: '/auth/signIn',
   },
-  {
-    pages: {
-      signIn: '/auth/signIn',
-    },
-  },
-)
+})
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+  ],
 }
