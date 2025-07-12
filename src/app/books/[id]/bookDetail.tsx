@@ -88,14 +88,15 @@ const BookDetail: FC<BookDetailProps> = async ({ bookId, userId }) => {
     }
   }
 
-  // 貸出中の数を保管場所毎から引く（簡易的に全貸出を均等に分散と仮定）
-  const totalLendingCount = bookDetail.lendingHistories.length
-  const totalRegistrationCount = bookDetail.registrationHistories.length
+  // 実際の貸出場所に基づいて貸出可能数を計算
+  Array.from(locationStats.entries()).forEach(([locationId, stats]) => {
+    // この場所から実際に貸し出されている数をカウント
+    const actualLendingFromThisLocation = bookDetail.lendingHistories.filter(
+      (lending) => lending.locationId === locationId,
+    ).length
 
-  Array.from(locationStats.values()).forEach((stats) => {
-    const locationRatio = stats.totalCount / totalRegistrationCount
-    const locationLendingCount = Math.round(totalLendingCount * locationRatio)
-    stats.lendableCount = Math.max(0, stats.totalCount - locationLendingCount)
+    // 貸出可能数 = 所蔵数 - 実際の貸出数
+    stats.lendableCount = Math.max(0, stats.totalCount - actualLendingFromThisLocation)
   })
 
   const _reservationCount = bookDetail._count.reservations

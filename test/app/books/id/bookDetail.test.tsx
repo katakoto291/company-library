@@ -102,7 +102,7 @@ describe('BookDetail component', () => {
     )
   })
 
-  it('貸し出し可能数は、場所ごとに比例配分される', async () => {
+  it('貸し出し可能数は、実際の貸出場所に基づいて計算される', async () => {
     const mockBookDetail = {
       ...bookDetail,
       registrationHistories: [
@@ -113,8 +113,8 @@ describe('BookDetail component', () => {
         { locationId: 2, location: { id: 2, name: '支社' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: 11 },
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: 11, locationId: 1 },
       ],
       _count: {
         reservations: 0,
@@ -130,14 +130,14 @@ describe('BookDetail component', () => {
 
     await screen.findByText(book.title)
 
-    // 本社: 3冊登録、貸出2冊の60%（1.2冊）なので1冊貸出、2冊利用可能
+    // 本社: 3冊所蔵、2冊貸出中なので1冊利用可能
     expect(screen.getByText('本社')).toBeInTheDocument()
-    expect(screen.getByText('2冊貸し出し可能')).toBeInTheDocument()
+    expect(screen.getByText('1冊貸し出し可能')).toBeInTheDocument()
     expect(screen.getByText('(所蔵数: 3冊)')).toBeInTheDocument()
 
-    // 支社: 2冊登録、貸出2冊の40%（0.8冊）なので1冊貸出、1冊利用可能
+    // 支社: 2冊所蔵、貸出なしなので2冊利用可能
     expect(screen.getByText('支社')).toBeInTheDocument()
-    expect(screen.getByText('1冊貸し出し可能')).toBeInTheDocument()
+    expect(screen.getByText('2冊貸し出し可能')).toBeInTheDocument()
     expect(screen.getByText('(所蔵数: 2冊)')).toBeInTheDocument()
   })
 
@@ -149,8 +149,8 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: '小規模オフィス' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: 11 },
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: 11, locationId: 1 },
       ],
       _count: {
         reservations: 0,
@@ -178,8 +178,8 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: userId }, // ユーザーが借りている
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: userId, locationId: 1 }, // ユーザーが借りている
       ],
       _count: {
         reservations: 0,
@@ -205,7 +205,7 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
       ],
-      lendingHistories: [{ id: 1, userId: 10 }],
+      lendingHistories: [{ id: 1, userId: 10, locationId: 1 }],
       _count: {
         reservations: 0,
       },
@@ -230,7 +230,7 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
       ],
       lendingHistories: [
-        { id: 1, userId: userId }, // ユーザーが借りている
+        { id: 1, userId: userId, locationId: 1 }, // ユーザーが借りている
       ],
       _count: {
         reservations: 0,
@@ -253,7 +253,7 @@ describe('BookDetail component', () => {
       ...bookDetail,
       registrationHistories: [{ locationId: 1, location: { id: 1, name: 'オフィス' } }],
       lendingHistories: [
-        { id: 1, userId: 10 }, // 他のユーザーが借りている
+        { id: 1, userId: 10, locationId: 1 }, // 他のユーザーが借りている
       ],
       _count: {
         reservations: 0,
@@ -316,8 +316,8 @@ describe('BookDetail component', () => {
         { locationId: 2, location: { id: 2, name: '支社' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: 11 },
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: 11, locationId: 1 },
       ],
       _count: {
         reservations: 1,
@@ -333,14 +333,14 @@ describe('BookDetail component', () => {
 
     await screen.findByText(book.title)
 
-    // 本社: 3冊登録、貸出2冊の60%（1.2冊）なので1冊貸出、2冊利用可能
+    // 本社: 3冊登録、2冊貸出中なので1冊利用可能
     expect(screen.getByText('本社')).toBeInTheDocument()
-    expect(screen.getByText('2冊貸し出し可能')).toBeInTheDocument()
+    expect(screen.getByText('1冊貸し出し可能')).toBeInTheDocument()
     expect(screen.getByText('(所蔵数: 3冊)')).toBeInTheDocument()
 
-    // 支社: 2冊登録、貸出2冊の40%（0.8冊）なので1冊貸出、1冊利用可能
+    // 支社: 2冊登録、貸出なしなので2冊利用可能
     expect(screen.getByText('支社')).toBeInTheDocument()
-    expect(screen.getByText('1冊貸し出し可能')).toBeInTheDocument()
+    expect(screen.getByText('2冊貸し出し可能')).toBeInTheDocument()
     expect(screen.getByText('(所蔵数: 2冊)')).toBeInTheDocument()
   })
 
@@ -355,8 +355,8 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: '東京オフィス' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: 11 },
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: 11, locationId: 1 },
       ],
       _count: {
         reservations: 0,
@@ -386,11 +386,11 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: '小規模オフィス' } },
       ],
       lendingHistories: [
-        { id: 1, userId: 10 },
-        { id: 2, userId: 11 },
-        { id: 3, userId: 12 },
-        { id: 4, userId: 13 },
-        { id: 5, userId: 14 },
+        { id: 1, userId: 10, locationId: 1 },
+        { id: 2, userId: 11, locationId: 1 },
+        { id: 3, userId: 12, locationId: 1 },
+        { id: 4, userId: 13, locationId: 1 },
+        { id: 5, userId: 14, locationId: 1 },
       ],
       _count: {
         reservations: 0,
