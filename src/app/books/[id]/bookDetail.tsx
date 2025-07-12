@@ -98,7 +98,7 @@ const BookDetail: FC<BookDetailProps> = async ({ bookId, userId }) => {
     stats.lendableCount = Math.max(0, stats.totalCount - locationLendingCount)
   })
 
-  const reservationCount = bookDetail._count.reservations
+  const _reservationCount = bookDetail._count.reservations
   const totalLendableCount = Array.from(locationStats.values()).reduce(
     (sum, stats) => sum + stats.lendableCount,
     0,
@@ -132,9 +132,10 @@ const BookDetail: FC<BookDetailProps> = async ({ bookId, userId }) => {
         <h1 className="text-3xl font-bold">{bookDetail.title}</h1>
 
         <div className="mt-3">
-          {Array.from(locationStats.entries()).length > 0 && (
-            <>
-              {Array.from(locationStats.entries()).sort((a, b) => a[0] - b[0]).map(([locationId, stats]) => {
+          {Array.from(locationStats.entries()).length > 0 &&
+            Array.from(locationStats.entries())
+              .sort((a, b) => a[0] - b[0])
+              .map(([locationId, stats]) => {
                 const isLocationLendable = !isLending && stats.lendableCount > 0
                 return (
                   <div
@@ -155,8 +156,6 @@ const BookDetail: FC<BookDetailProps> = async ({ bookId, userId }) => {
                   </div>
                 )
               })}
-            </>
-          )}
         </div>
 
         <div className="mt-auto flex gap-5">

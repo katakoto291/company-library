@@ -8,14 +8,14 @@ const { prismaMock } = vi.hoisted(() => {
   return {
     prismaMock: {
       book: {
-        findUnique: vi.fn()
-      }
-    }
+        findUnique: vi.fn(),
+      },
+    },
   }
 })
 
 vi.mock('@/libs/prisma/client', () => ({
-  default: prismaMock
+  default: prismaMock,
 }))
 
 describe('BookDetail component', () => {
@@ -33,7 +33,7 @@ describe('BookDetail component', () => {
     },
   }
   vi.mock('@/app/books/[id]/lendButton', () => ({
-    default: (props: any) => {
+    default: (props: { disabled: boolean }) => {
       return (
         <button disabled={props.disabled} type="button">
           借りる
@@ -43,7 +43,7 @@ describe('BookDetail component', () => {
   }))
 
   vi.mock('@/app/books/[id]/returnButton', () => ({
-    default: (props: any) => {
+    default: (props: { disabled: boolean }) => {
       return (
         <button disabled={props.disabled} type="button">
           返却する
@@ -129,7 +129,7 @@ describe('BookDetail component', () => {
     )
 
     await screen.findByText(book.title)
-    
+
     // 本社: 3冊登録、貸出2冊の60%（1.2冊）なので1冊貸出、2冊利用可能
     expect(screen.getByText('本社')).toBeInTheDocument()
     expect(screen.getByText('2冊貸し出し可能')).toBeInTheDocument()
@@ -140,8 +140,6 @@ describe('BookDetail component', () => {
     expect(screen.getByText('1冊貸し出し可能')).toBeInTheDocument()
     expect(screen.getByText('(所蔵数: 2冊)')).toBeInTheDocument()
   })
-
-
 
   it('借りるボタンは、貸し出し可能数が0冊の場合、無効である', async () => {
     const mockBookAllLent = {
@@ -207,9 +205,7 @@ describe('BookDetail component', () => {
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
         { locationId: 1, location: { id: 1, name: 'オフィス' } },
       ],
-      lendingHistories: [
-        { id: 1, userId: 10 },
-      ],
+      lendingHistories: [{ id: 1, userId: 10 }],
       _count: {
         reservations: 0,
       },
@@ -255,9 +251,7 @@ describe('BookDetail component', () => {
   it('返却するボタンは、借用中ではない場合、無効である', async () => {
     const mockBookNotBorrowing = {
       ...bookDetail,
-      registrationHistories: [
-        { locationId: 1, location: { id: 1, name: 'オフィス' } },
-      ],
+      registrationHistories: [{ locationId: 1, location: { id: 1, name: 'オフィス' } }],
       lendingHistories: [
         { id: 1, userId: 10 }, // 他のユーザーが借りている
       ],
@@ -430,9 +424,7 @@ describe('BookDetail component', () => {
         { locationId: 2, location: { id: 2, name: 'B拠点' } },
         { locationId: 3, location: { id: 3, name: 'C拠点' } },
       ],
-      lendingHistories: [
-        { id: 1, userId: 10, locationId: 1 },
-      ],
+      lendingHistories: [{ id: 1, userId: 10, locationId: 1 }],
       _count: {
         reservations: 2,
       },
