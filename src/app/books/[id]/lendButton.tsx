@@ -24,7 +24,7 @@ const LendButton: FC<LendButtonProps> = ({ bookId, userId, disabled, locationSta
 
   const availableLocations = Array.from(locationStats.entries())
     .filter(([_, stats]) => stats.lendableCount > 0)
-    .sort(([_, a], [__, b]) => b.lendableCount - a.lendableCount)
+    .sort((a, b) => a[0] - b[0])
 
   const onClick = () => {
     if (!selectedLocationId) {
