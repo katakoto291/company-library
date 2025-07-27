@@ -5,7 +5,13 @@
       "Bash(yarn test:*)",
       "Bash(yarn typeCheck)",
       "Bash(yarn lint)",
-      "Bash(yarn lint:*)"
+      "Bash(yarn lint:*)",
+
+      "Bash(powershell -Command yarn test)",
+      "Bash(powershell -Command \"yarn test:*\")",
+      "Bash(powershell -Command yarn typeCheck)",
+      "Bash(powershell -Command yarn lint)",
+      "Bash(powershell -Command \"yarn lint:*\")"
     ],
     "deny": []
   }

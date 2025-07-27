@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 言語設定
+Claude Codeは常に日本語で応答してください。コードコメントやメッセージも日本語で記述してください。
+
 ## よく使用する開発コマンド
 
 ### 開発サーバー
