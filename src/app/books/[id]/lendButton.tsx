@@ -54,6 +54,15 @@ const LendButton: FC<LendButtonProps> = ({ bookId, userId, disabled, locationSta
       router.refresh()
     } else if (state.error) {
       window.alert(state.error)
+      // エラー時に入力値を復元
+      if (state.value) {
+        if (state.value.dueDate) {
+          setDueDate(new Date(state.value.dueDate))
+        }
+        if (state.value.locationId) {
+          setSelectedLocationId(Number(state.value.locationId))
+        }
+      }
     }
   }, [state, router, closeModal])
 
@@ -67,46 +76,46 @@ const LendButton: FC<LendButtonProps> = ({ bookId, userId, disabled, locationSta
         <div className="modal-box">
           <h3 className="font-bold text-lg">借りますか?</h3>
 
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="locationSelect">
-              保管場所を選択してください
-            </label>
-            <select
-              id="locationSelect"
-              className="select select-bordered w-full"
-              value={selectedLocationId}
-              onChange={(e) => setSelectedLocationId(e.target.value)}
-            >
-              <option value="" disabled>
-                保管場所を選択
-              </option>
-              {availableLocations.map(([locationId, stats]) => (
-                <option key={locationId} value={locationId}>
-                  {stats.name} ({stats.lendableCount}冊利用可能)
+          <form action={onSubmit}>
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-2" htmlFor="locationSelect">
+                保管場所を選択してください
+              </label>
+              <select
+                id="locationSelect"
+                className="select select-bordered w-full"
+                value={selectedLocationId}
+                onChange={(e) => setSelectedLocationId(e.target.value)}
+              >
+                <option value="" disabled>
+                  保管場所を選択
                 </option>
-              ))}
-            </select>
-          </div>
+                {availableLocations.map(([locationId, stats]) => (
+                  <option key={locationId} value={locationId}>
+                    {stats.name} ({stats.lendableCount}冊利用可能)
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="dueDate">
-              返却期限日
-            </label>
-            <input
-              id="dueDate"
-              type="date"
-              className="
-                input input-bordered
-                w-full p-2.5
-              "
-              value={toJstFormat(dueDate, DATE_SYSTEM_FORMAT)}
-              onChange={(e) => setDueDate(dateStringToDate(e.target.value))}
-              min={toJstFormat(new Date(), DATE_SYSTEM_FORMAT)}
-            />
-          </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-2" htmlFor="dueDate">
+                返却期限日
+              </label>
+              <input
+                id="dueDate"
+                type="date"
+                className="
+                  input input-bordered
+                  w-full p-2.5
+                "
+                value={toJstFormat(dueDate, DATE_SYSTEM_FORMAT)}
+                onChange={(e) => setDueDate(dateStringToDate(e.target.value))}
+                min={toJstFormat(new Date(), DATE_SYSTEM_FORMAT)}
+              />
+            </div>
 
-          <div className="modal-action">
-            <form action={onSubmit}>
+            <div className="modal-action">
               <button type="submit" className="btn btn-primary" disabled={isPending}>
                 {isPending ? (
                   <>
@@ -117,12 +126,12 @@ const LendButton: FC<LendButtonProps> = ({ bookId, userId, disabled, locationSta
                   'Ok'
                 )}
               </button>
-            </form>
 
-            <button type="button" className="btn ml-5" onClick={closeModal} disabled={isPending}>
-              Cancel
-            </button>
-          </div>
+              <button type="button" className="btn ml-5" onClick={closeModal} disabled={isPending}>
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       </dialog>
     </>

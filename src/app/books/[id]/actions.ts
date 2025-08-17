@@ -36,6 +36,10 @@ export const lendBook = async (
 type LendBookState = {
   success: boolean
   error: string | null
+  value?: {
+    dueDate: string
+    locationId: string
+  }
 }
 
 /**
@@ -50,12 +54,18 @@ export const lendBookAction = async (
   const dueDate = new Date(formData.get('dueDate') as string)
   const locationId = Number(formData.get('locationId'))
 
+  const inputValues = {
+    dueDate: formData.get('dueDate') as string,
+    locationId: formData.get('locationId') as string,
+  }
+
   const result = await lendBook(bookId, userId, dueDate, locationId)
 
   if (result instanceof Error) {
     return {
       success: false,
       error: result.message,
+      value: inputValues,
     }
   }
 
