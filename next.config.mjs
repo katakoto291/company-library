@@ -4,6 +4,13 @@ import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
+  outputFileTracingIncludes: {
+    '/*': [
+      './src/generated/prisma/**/*',
+      './node_modules/@prisma/client/**/*.node',
+      './node_modules/.prisma/client/**/*.node',
+    ],
+  },
   images: {
     remotePatterns: [
       { hostname: 'books.google.com' },
