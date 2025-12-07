@@ -14,7 +14,9 @@ const nextConfig = {
   },
   typedRoutes: true,
   webpack: (config, { isServer }) => {
-    config.plugins = [...config.plugins, new PrismaPlugin()]
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()]
+    }
 
     return config
   },
