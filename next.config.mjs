@@ -1,32 +1,32 @@
-import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
+import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  // output: 'standalone',
   outputFileTracingIncludes: {
-    '/*': [
-      './src/generated/prisma/**/*',
-      './node_modules/@prisma/client/**/*.node',
-      './node_modules/.prisma/client/**/*.node',
+    "/*": [
+      "./src/generated/prisma/**/*",
+      "./node_modules/@prisma/client/**/*.node",
+      "./node_modules/.prisma/client/**/*.node",
     ],
   },
   images: {
     remotePatterns: [
-      { hostname: 'books.google.com' },
-      { hostname: 'gravatar.com' },
-      { hostname: 'picsum.photos' },
-      { hostname: '*.public.blob.vercel-storage.com' },
+      { hostname: "books.google.com" },
+      { hostname: "gravatar.com" },
+      { hostname: "picsum.photos" },
+      { hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   typedRoutes: true,
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.plugins = [...config.plugins, new PrismaPlugin()]
+      config.plugins = [...config.plugins, new PrismaPlugin()];
     }
 
-    return config
+    return config;
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
