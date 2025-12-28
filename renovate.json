@@ -6,6 +6,7 @@
   "schedule": "before 9am on Saturday",
   "timezone": "Asia/Tokyo",
   "rangeStrategy": "bump",
+  "minimumReleaseAge": "14",
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
