@@ -46,7 +46,7 @@ describe('navigationBar component', async () => {
       )
     })
 
-    expect(screen.getByText('company-library')).toBeInTheDocument()
+    expect(screen.getByText('company-library-beta')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '書籍一覧' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '書籍一覧' })).not.toHaveClass('bg-gray-600')
     expect(screen.getByRole('link', { name: '登録' })).toBeInTheDocument()
@@ -67,7 +67,7 @@ describe('navigationBar component', async () => {
       )
     })
 
-    expect(screen.getByText('company-library')).toHaveAttribute('href', '/')
+    expect(screen.getByText('company-library-beta')).toHaveAttribute('href', '/')
   })
 
   it('pathが/の場合、書籍一覧ボタンのデザインが強調される', async () => {
